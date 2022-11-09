@@ -20,8 +20,14 @@ async function run() {
         const reviewCollection = client.db('travelonthego').collection('reviews')
 
         app.get('/packages', async (req, res) => {
-            const query = {};
+            let query = {};
             const cursor = packagesCollection.find(query);
+            if (req.query.limit) {
+                const size = parseInt(req.query.limit)
+                const packages = await cursor.limit(size).toArray();
+                res.send(packages);
+                return
+            }
             const packages = await cursor.toArray();
             res.send(packages);
         });
