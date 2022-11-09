@@ -37,6 +37,15 @@ async function run() {
             const result = await packagesCollection.insertOne(tourPackage);
             res.send(result);
         });
+        app.get('/reviews/:id', async (req, res) => {
+            let id = req.params.id;
+            const query = { package: id }
+            const cursor = reviewCollection.find(query)
+            const reviews = await cursor.toArray();
+            res.send(reviews);
+        });
+
+
         app.post('/reviews', async (req, res) => {
             const addedReview = req.body;
             const review = await reviewCollection.insertOne(addedReview);
