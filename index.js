@@ -30,6 +30,12 @@ async function run() {
             const tourPackage = await packagesCollection.findOne(query);
             res.send(tourPackage);
         })
+
+        app.post('/addpackages', async (req, res) => {
+            const tourPackage = req.body;
+            const result = await packagesCollection.insertOne(tourPackage);
+            res.send(result);
+        });
     }
     finally {
 
