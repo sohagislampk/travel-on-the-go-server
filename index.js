@@ -45,7 +45,7 @@ async function run() {
         //packages API
         app.get('/packages', async (req, res) => {
             let query = {};
-            const cursor = packagesCollection.find(query);
+            const cursor = packagesCollection.find(query).sort({ "_id": -1 });
             if (req.query.limit) {
                 const size = parseInt(req.query.limit)
                 const packages = await cursor.limit(size).toArray();
@@ -87,7 +87,7 @@ async function run() {
                     writerEmail: req.query.email
                 }
             }
-            const cursor = reviewCollection.find(query)
+            const cursor = reviewCollection.find(query).sort({ "time": -1 })
             const reviews = await cursor.toArray();
             res.send(reviews);
         });
