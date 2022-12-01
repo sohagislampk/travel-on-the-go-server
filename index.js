@@ -10,7 +10,7 @@ require('dotenv').config();
 app.use(cors())
 app.use(express.json())
 
-//MongoDB uri and Client 
+//MongoDB uri and Client strat
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.9qpmxm2.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -55,6 +55,19 @@ async function run() {
             const packages = await cursor.toArray();
             res.send(packages);
         });
+        app.get('/compare', async (req, res) => {
+            const id1 = req.query.a;
+            const id2 = req.query.a;
+            const query1 = { _id: ObjectId(id1) }
+            const query2 = {
+                _id: ObjectId(id2)
+            }
+            console.log(req.query.a);
+            console.log(req.query.b);
+
+            const result = await packagesCollection.find({ _id: { $eq: { ObjectId(id1), ObjectId(id2) } } }).toArray()
+            res.send(result)
+        })
         app.get('/packages/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
@@ -76,6 +89,8 @@ async function run() {
             const reviews = await cursor.toArray();
             res.send(reviews);
         });
+
+
         app.get('/reviews', verifyJWT, async (req, res) => {
             const decoded = req.decoded;
             if (decoded.email !== req.query.email) {
