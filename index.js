@@ -57,15 +57,13 @@ async function run() {
         });
         app.get('/compare', async (req, res) => {
             const id1 = req.query.a;
-            const id2 = req.query.a;
-            const query1 = { _id: ObjectId(id1) }
-            const query2 = {
-                _id: ObjectId(id2)
-            }
-            console.log(req.query.a);
-            console.log(req.query.b);
+            const id2 = req.query.b
+            const query1 = { _id: { $eq: [ObjectId(id1)] } }
 
-            const result = await packagesCollection.find({ _id: { $eq: { ObjectId(id1), ObjectId(id2) } } }).toArray()
+            console.log(req.query.a);
+
+
+            const result = await packagesCollection.findOne(query)
             res.send(result)
         })
         app.get('/packages/:id', async (req, res) => {
